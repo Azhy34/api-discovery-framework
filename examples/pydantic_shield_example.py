@@ -1,5 +1,5 @@
 """
-Production-grade Two-Layer Pydantic Shield & Observability Template.
+Production-grade Two-Layer Pydantic Shield and Observability Template.
 Includes error contracts, status categorization, cloud logging, and circuit breakers.
 """
 
@@ -10,31 +10,31 @@ import time
 from pydantic import BaseModel, Field
 
 # =====================================================================
-# 🛡️ 1. Pydantic Error Contract Schema
+# 1. Pydantic Error Contract Schema
 # =====================================================================
 
 class BaseServiceResult(BaseModel):
-    """Базовый контракт двухслойной ширмы с защитой от сбоев."""
-    data: Optional[Any] = Field(default=None, description="Основная полезная нагрузка сервиса")
+    """Base contract for the Two-Layer Shield with fault tolerance."""
+    data: Optional[Any] = Field(default=None, description="Primary service payload")
     source_status: str = Field(
         default="OK",
-        description="Статус источника: OK, QUOTA_EXCEEDED, SERVICE_DEGRADED, AUTH_ERROR, RATE_LIMITED, FALLBACK"
+        description="Source status: OK, QUOTA_EXCEEDED, SERVICE_DEGRADED, AUTH_ERROR, RATE_LIMITED, FALLBACK"
     )
     error_type: Optional[str] = Field(
         default=None,
-        description="Машинный код ошибки: invalid_token, quota_exceeded, timeout, network_error"
+        description="Machine-readable error code: invalid_token, quota_exceeded, timeout, network_error"
     )
     warning_note: Optional[str] = Field(
         default=None,
-        description="Мягкое человекочитаемое уведомление для клиента и агента при сбое или фоллбеке"
+        description="Human-readable, calm fallback message for both user and agent upon degraded state"
     )
 
 # =====================================================================
-# 📊 2. Structured Cloud Logging
+# 2. Structured Cloud Logging (Zero Leak)
 # =====================================================================
 
 def log_cloud_event(severity: str, event_name: str, **kwargs):
-    """Выводит структурированный лог для Google Cloud Logging / Cloud Trace."""
+    """Emits structured JSON logs for Google Cloud Logging / Cloud Trace with secret masking."""
     log_entry = {
         "timestamp": datetime.utcnow().isoformat() + "Z",
         "severity": severity.upper(),
@@ -44,11 +44,11 @@ def log_cloud_event(severity: str, event_name: str, **kwargs):
     print(json.dumps(log_entry, ensure_ascii=False), flush=True)
 
 # =====================================================================
-# 🛠️ 3. Safe Execution Wrapper Example
+# 3. Safe Execution Wrapper Example
 # =====================================================================
 
 def safe_api_executor(service_call_fn, fallback_data=None, *args, **kwargs) -> BaseServiceResult:
-    """Оборачивает любой внешний API-вызов в отказоустойчивую ширму."""
+    """Wraps any external API call into a resilient two-layer shield."""
     start_time = time.time()
     try:
         raw_result = service_call_fn(*args, **kwargs)
@@ -70,5 +70,5 @@ def safe_api_executor(service_call_fn, fallback_data=None, *args, **kwargs) -> B
             data=fallback_data,
             source_status=status,
             error_type="network_or_api_error",
-            warning_note="⚠️ Основной сервис временно ограничен. Применены резервные расчеты."
+            warning_note="Service temporarily degraded. Fallback estimates applied."
         )

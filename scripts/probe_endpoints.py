@@ -1,6 +1,6 @@
 """
-Универсальный скрипт автотестирования и зондирования сырых API-эндпоинтов.
-Замеряет latency, сохраняет дампы 200 OK и 4xx/5xx ошибок для генерации Pydantic-ширм.
+Universal automated probing script for raw API endpoints.
+Measures latency, captures live 200 OK payloads and 4xx/5xx error structures to generate Pydantic shields.
 """
 
 import json
@@ -16,7 +16,7 @@ def probe_endpoint(
     params: Optional[Dict[str, Any]] = None, 
     json_body: Optional[Dict[str, Any]] = None
 ) -> Dict[str, Any]:
-    """Зондирует эндпоинт и возвращает детальную структуру с реальными ключами ответа."""
+    """Probes an endpoint and returns detailed response structure with real payload keys."""
     start = time.time()
     try:
         resp = requests.request(
@@ -56,11 +56,11 @@ def probe_endpoint(
         }
 
 def run_endpoints_probe(endpoints: List[Dict[str, Any]], output_file: str = "raw_endpoints_audit.json"):
-    """Запускает пакетное зондирование списка эндпоинтов и формирует JSON-отчет."""
+    """Runs batch probing across a list of endpoints and writes JSON audit report."""
     results = []
-    print(f"🚀 Запуск тестирования {len(endpoints)} эндпоинтов...")
+    print(f"🚀 Starting audit across {len(endpoints)} endpoints...")
     for ep in endpoints:
-        print(f"  • Зондирование: [{ep.get('method', 'GET')}] {ep.get('name')} ...")
+        print(f"  • Probing: [{ep.get('method', 'GET')}] {ep.get('name')} ...")
         res = probe_endpoint(
             name=ep["name"],
             method=ep.get("method", "GET"),
@@ -75,8 +75,8 @@ def run_endpoints_probe(endpoints: List[Dict[str, Any]], output_file: str = "raw
 
     with open(output_file, "w", encoding="utf-8") as f:
         json.dump(results, f, ensure_ascii=False, indent=2)
-    print(f"💾 Полный дамп ответов успешно сохранен в: {output_file}")
+    print(f"💾 Full audit dump successfully saved to: {output_file}")
     return results
 
 if __name__ == "__main__":
-    print(" probe_endpoints runner готов к вызовам.")
+    print("probe_endpoints runner initialized.")
