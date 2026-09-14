@@ -1,0 +1,4 @@
+pydantic>=2.5.0
+requests>=2.31.0
+httpx>=0.25.0
+datamodel-code-generator>=0.25.0
