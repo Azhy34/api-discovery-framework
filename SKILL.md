@@ -18,9 +18,8 @@ api-discovery/
 ├── SKILL.md                                 # [Tier 1 + Tier 2] Главная методология и 3 фазы интеграции
 ├── scripts/
 │   └── probe_endpoints.py                   # [Tier 3] Универсальный раннер автотестирования эндпоинтов
-└── references/
-    ├── pydantic_shield_template.py          # [Tier 3] Готовый шаблон Two-Layer Pydantic Error Shield
-    └── google_travel_multi_aggregator.md    # [Tier 3] Кейс: Мультиагрегатор Google Travel (0% расходов API)
+└── examples/
+    └── pydantic_shield_example.py           # [Tier 3] Готовый шаблон Two-Layer Pydantic Error Shield
 ```
 
 ---
@@ -144,7 +143,7 @@ flowchart LR
 
 ## 🛡️ Phase 2: Layer 1 — Deterministic Code & Observability Shield (`tools.py`)
 
-На основе сгенерированных моделей от `datamodel-codegen` создается двухслойная ширма (см. шаблон [`references/pydantic_shield_template.py`](references/pydantic_shield_template.py)):
+На основе сгенерированных моделей от `datamodel-codegen` создается двухслойная ширма (см. шаблон [`examples/pydantic_shield_example.py`](examples/pydantic_shield_example.py)):
 
 ### 1. Pydantic Two-Layer Shield Return Contract
 ```python

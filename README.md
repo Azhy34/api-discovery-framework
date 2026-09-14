@@ -116,9 +116,8 @@ api-discovery-framework/
 ├── requirements.txt                         # Runtime dependencies
 ├── scripts/
 │   └── probe_endpoints.py                   # Automated latency & payload audit probe
-└── references/
-    ├── pydantic_shield_template.py          # Production Two-Layer Pydantic Shield & Cloud Logger
-    └── google_travel_multi_aggregator.md    # Real-world case study: Multi-Aggregator with Zero API Costs
+└── examples/
+    └── pydantic_shield_example.py           # Production Two-Layer Pydantic Shield & Cloud Logger
 `
 
 ---
